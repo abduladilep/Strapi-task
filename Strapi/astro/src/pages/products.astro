@@ -1,0 +1,53 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const fetchProducts = async () => {
+  try {
+    const response = await fetch('http://localhost:1337/api/products?populate=Image');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    console.log('Fetched products:', data); // Log fetched data
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch products:', error);
+    return { data: [] }; // Return an empty list in case of error
+  }
+};
+
+const products = await fetchProducts();
+---
+
+<Layout title="Product Catalog">
+  <main>
+    <h1 style="color: white;">Product Catalog</h1>
+    <ul id="product-list">
+      {products.data.length ? (
+        products.data.map(product => {
+          const imageUrl = product.attributes.Image?.data[0]?.attributes?.formats?.large?.url
+            ? `http://localhost:1337${product.attributes.Image.data[0].attributes.formats.large.url}`
+            : '/default-image.jpg';
+          return (
+
+          <li key={product.id}>
+            <h2 style="color: white;">{product.attributes.Title}</h2>
+ <img 
+              src={product.attributes.Image?.data[0]?.attributes?.formats?.large?.url 
+                ? `http://localhost:1337${product.attributes.Image.data[0].attributes.formats.large.url}` 
+                : '/default-image.jpg'}
+              alt={product.attributes.Title} 
+               style={{ width: '200px', height: 'auto' }}
+            /> <p style="color:white;">{product.attributes.Price}</p>
+            <button onclick={() => addToCart(product.id)}  style={{ width: '200px', height: 'auto' }}>Add to Cart</button>
+          </li>
+        );
+        })
+      ) : (
+        <li style="color: white;">No products available</li>
+      )}
+    </ul>
+<script src="/ws.js" defer></script>
+
+  </main>
+</Layout>

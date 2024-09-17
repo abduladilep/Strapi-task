@@ -1,0 +1,36 @@
+---
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  const form = event.target;
+  const formData = new FormData(form);
+  
+  const response = await fetch('/api/login', {
+    method: 'POST',
+    body: formData,
+  });
+
+  const data = await response.json();
+  if (data.success) {
+    alert('Login successful');
+  } else {
+    alert('Login failed');
+  }
+};
+---
+
+<html lang="en">
+  <body>
+    <h1>Login</h1>
+    <form onsubmit={handleSubmit} method="POST">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required />
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required />
+
+      <button type="submit">Login</button>
+    </form>
+    <script src="/ws.js" defer></script>
+
+  </body>
+</html>

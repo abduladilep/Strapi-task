@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { useState, useEffect } from 'react';
+
+const userId = 3; // Replace with the actual user ID or make it dynamic
+const [cartItems, setCartItems] = useState([]);
+
+useEffect(() => {
+  const fetchCart = async () => {
+    try {
+      const response = await fetch(`http://localhost:1337/api/cart'`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setCartItems(data);
+    } catch (error) {
+      console.error('Failed to fetch cart items:', error);
+    }
+  };
+
+  fetchCart();
+}, []);
+---
+
+<Layout title="Cart">
+  <main>
+    <h1>Cart Items</h1>
+    <ul>
+      {cartItems.length ? (
+        cartItems.map(item => (
+          <li key={item.id}>
+            <h2>{item.product.name}</h2>
+            <p>{item.product.description}</p>
+            <p>Price: {item.product.price}</p>
+          </li>
+        ))
+      ) : (
+        <li>No items in the cart</li>
+      )}
+    </ul>
+  </main>
+</Layout>
