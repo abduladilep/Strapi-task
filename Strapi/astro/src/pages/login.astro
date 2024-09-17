@@ -12,8 +12,13 @@ const handleSubmit = async (event) => {
   const data = await response.json();
   if (data.success) {
     alert('Login successful');
+        window.location.href = '/products'; // Redirect to the products page after successful login
+
+    
   } else {
     alert('Login failed');
+        window.location.href = '/products'; // Redirect to the products page after successful login
+
   }
 };
 ---
@@ -30,6 +35,10 @@ const handleSubmit = async (event) => {
 
       <button type="submit">Login</button>
     </form>
+      <p>
+      Don't have an account? 
+      <a href="/register">Register</a> <!-- This will redirect to the registration page -->
+    </p>
     <script src="/ws.js" defer></script>
 
   </body>
